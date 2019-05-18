@@ -39,6 +39,7 @@ public class Board extends JPanel implements ActionListener {
     {810, 220}, {860, 20}, {740, 180},
     {820, 128}, {490, 170}, {700, 30}
 	};
+	//These are initial positions of alien ships//
 	
 	public Board() {
 		
@@ -70,6 +71,7 @@ public class Board extends JPanel implements ActionListener {
 			aliens.add(new Alien(p[0], p[1]));
 		}
 	}
+	//The initAliens() method creates a list of alien objects. The aliens take their initial positions from the pos array//
 	
 	@Override
 	public void paintComponent(Graphics g) {
@@ -86,6 +88,8 @@ public class Board extends JPanel implements ActionListener {
 		Toolkit.getDefaultToolkit().sync();
 	}
 	
+	//Inside the painComponent() method, we either draw game sprites or write the game over message. This depends on the ingame variable//
+	
 	private void drawObjects(Graphics g) {
 		
 		if (spaceship.isVisible()) {
@@ -99,16 +103,20 @@ public class Board extends JPanel implements ActionListener {
 				g.drawImage(missile.getImage(), missile.getX(), missile.getY(), this);
 			}
 		}
+	//The drawObjects() methods draws the game sprites on the window. First, we draw the craftt sprite//
 		
 		for (Alien alien : aliens) {
 			if (alien.isVisible()) {
 				g.drawImage(alien.getImage(), alien.getX(), alien.getY(), this);
 			}
 		}
+		//In this loop we draw all aliens; they can be drawn only if they have not been previously destroyed. This is checked by the isVisible() method//
 		
 		g.setColor(Color.WHITE);
 		g.drawString("Aliens left: " + aliens.size(), 5, 15);
 	}
+	
+	//In the top-left corner of the window, there is a text showing how many aliens are left//
 	
 	private void drawGameOver(Graphics g) {
 		
@@ -121,6 +129,9 @@ public class Board extends JPanel implements ActionListener {
 		g.drawString(msg, (B_WIDTH - fm.stringWidth(msg)) / 2;
 								 B_HEIGHT /2);
 	}
+	
+	//The drawGameOver() draws a game over message in the middle of the window//
+	//The message is displayed in the end of the game, either when we destroy all alien ships or when we collide with one of them//
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -135,6 +146,10 @@ public class Board extends JPanel implements ActionListener {
 		
 		repaint();
 	}
+	
+	//Each action event represents one game cycle//
+	//The game logic is factored into specific game events//
+	//For instance, the updateMissiles() moves all the available missiles//
 	
 	private void inGame() {
 		
@@ -187,6 +202,10 @@ public class Board extends JPanel implements ActionListener {
 		}
 	}
 	
+	//Inside the updateAliens() method, we first check if there are any alien ships left in the aliens list..//
+	//The game is finished if the list is empty//
+	//If it is not empty, we go through the list and remove all of the alien ships within the list//
+	
 	public void checkCollisions() {
 		
 		Rectangle r3 = spaceship.getBounds();
@@ -202,6 +221,11 @@ public class Board extends JPanel implements ActionListener {
 				ingame = false;
 			}
 		}
+		
+		//The checkCollisions() method checks for possible collisions//
+		//First, we check if the craft object collides with any of the alien objects//
+		//We get the rectangles of the objects with the getBounds() method//
+		//The intersects() method checks if the two rectangles intersect//
 		
 		List<Missile> ms = spaceship.getMissiles();
 		
@@ -221,6 +245,8 @@ public class Board extends JPanel implements ActionListener {
 			}
 		}
 	}
+	
+		//This code cheks the collions between aliens and missiles//
 	
 	private class TAdapter extends KeyAdapter {
 		
